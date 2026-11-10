@@ -22,7 +22,14 @@
 
       <div class="contact-form-wrap">
         <h2>{{ if $el }}Φόρμα Επικοινωνίας{{ else }}Contact Form{{ end }}</h2>
-        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST"
+              data-sending="{{ if $el }}Αποστολή…{{ else }}Sending…{{ end }}"
+              data-success="{{ if $el }}Ευχαριστούμε! Το μήνυμά σας στάλθηκε και θα σας απαντήσουμε σύντομα.{{ else }}Thank you! Your message has been sent and we will get back to you soon.{{ end }}"
+              data-error="{{ if $el }}Κάτι πήγε στραβά και το μήνυμα δεν στάλθηκε. Δοκιμάστε ξανά ή γράψτε μας στο {{ site.Params.email }}.{{ else }}Something went wrong and your message was not sent. Please try again or email us at {{ site.Params.email }}.{{ end }}">
+          <input type="hidden" name="access_key" value="{{ site.Params.contactFormKey }}">
+          <input type="hidden" name="from_name" value="EATWISE website ({{ if $el }}ελληνικά{{ else }}English{{ end }})">
+          {{/* Spam trap: hidden from people; bots that tick it are rejected */}}
+          <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-group">
             <label for="name">{{ if $el }}Ονοματεπώνυμο{{ else }}Full name{{ end }}</label>
             <input type="text" id="name" name="name" required>
@@ -45,14 +52,43 @@
           </div>
           <div class="form-group form-consent">
             <label>
-              <input type="checkbox" name="consent" required>
+              <input type="checkbox" name="consent" value="{{ if $el }}Ναι{{ else }}Yes{{ end }}" required>
               {{ if $el }}Συγκατάθεση για την επεξεργασία των στοιχείων επικοινωνίας{{ else }}Consent to the processing of contact details{{ end }}
             </label>
           </div>
           <button type="submit" class="btn btn-primary">{{ if $el }}Αποστολή{{ else }}Send{{ end }}</button>
+          <p class="form-status" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
     </div>
   </div>
 </section>
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  if (!form || !window.fetch) return;
+  var status = form.querySelector('.form-status');
+  var button = form.querySelector('button[type="submit"]');
+  var label = button.textContent;
+  function show(text, ok) {
+    status.textContent = text;
+    status.className = 'form-status ' + (ok ? 'is-success' : 'is-error');
+    status.hidden = false;
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    button.disabled = true;
+    button.textContent = form.dataset.sending;
+    status.hidden = true;
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) { form.reset(); show(form.dataset.success, true); }
+        else { show(form.dataset.error, false); }
+      })
+      .catch(function () { show(form.dataset.error, false); })
+      .finally(function () { button.disabled = false; button.textContent = label; });
+  });
+})();
+</script>
 {{ end }}

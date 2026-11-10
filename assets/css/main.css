@@ -744,6 +744,16 @@ img {
   font-size: 0.9rem;
 }
 .form-consent input { width: auto; margin-top: 0.2rem; }
+.contact-form .form-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.contact-form button[disabled] { opacity: 0.7; cursor: wait; }
+.form-status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+.form-status.is-success { background: #eafbf6; border-color: var(--primary); }
+.form-status.is-error { background: #fdeeee; border-color: #d9534f; }
 @media (max-width: 768px) {
   .contact-layout { grid-template-columns: 1fr; }
 }

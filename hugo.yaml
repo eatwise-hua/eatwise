@@ -76,6 +76,9 @@ params:
   email: "eatwise@hua.gr"
   university: "Harokopio University"
   projectNumber: "29364"
+  # Contact form (Web3Forms). Messages go to the inbox this key was created for (eatwise@hua.gr).
+  # To change the inbox, create a new key at https://web3forms.com and paste it here.
+  contactFormKey: "3ad68ebe-3247-4a6a-a7ad-83bafa1262ca"
   social:
     facebook: "https://www.facebook.com/profile.php?id=61590822057047"
     instagram: "https://www.instagram.com/eatwiseproject"
