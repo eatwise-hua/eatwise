@@ -81,7 +81,7 @@ params:
   contactFormKey: "3ad68ebe-3247-4a6a-a7ad-83bafa1262ca"
   # Visitor statistics (GoatCounter, no cookies). Put the site code here, e.g. "eatwise";
   # the dashboard is then at https://eatwise.goatcounter.com. Leave empty to disable.
-  goatcounter: ""
+  goatcounter: "eatwise"
   social:
     facebook: "https://www.facebook.com/profile.php?id=61590822057047"
     instagram: "https://www.instagram.com/eatwiseproject"
